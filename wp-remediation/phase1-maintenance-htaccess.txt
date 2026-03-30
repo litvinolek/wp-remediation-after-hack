@@ -1,0 +1,28 @@
+# =============================================================================
+# Phase 1 — Maintenance Mode .htaccess Rules
+#
+# Upload this to the WordPress root directory via SFTP/SSH.
+# Add these lines AT THE VERY TOP of the existing .htaccess file.
+#
+# Steps:
+#   1. Find your public IP at https://whatismyip.com
+#   2. Replace YOUR.IP.ADDRESS below with your IP (escape dots with \)
+#   3. Upload / paste at the top of .htaccess in the WP root
+#   4. Test: visit your site from another device — you should see the 503
+#
+# To undo: remove these lines from .htaccess when remediation is complete.
+# =============================================================================
+
+# --- BEGIN MAINTENANCE MODE ---
+RewriteEngine On
+
+# Allow your IP through (replace with your actual IP, dots escaped)
+RewriteCond %{REMOTE_ADDR} !^123\.456\.789\.012$
+
+# Optional: allow a second IP (uncomment and edit if needed)
+# RewriteCond %{REMOTE_ADDR} !^111\.222\.333\.444$
+
+# Block everyone else with a 503 Service Unavailable
+RewriteRule ^(.*)$ - [R=503,L]
+ErrorDocument 503 "<html><head><title>Maintenance</title></head><body style='font-family:sans-serif;text-align:center;padding:60px;'><h1>We'll be back shortly</h1><p>This site is undergoing scheduled maintenance. Please check back soon.</p></body></html>"
+# --- END MAINTENANCE MODE ---
